@@ -4,7 +4,7 @@
       style="margin-top: -30px; margin-bottom: 30px"
       src="images/newsBackground.png"
     ></q-img>
-    <div style="padding: 0 10px">
+    <div style="padding: 0 10px" v-if="newsData?.news">
       <q-carousel
         animated
         v-model="slide"
@@ -25,8 +25,8 @@
         <q-carousel-slide :name="4" img-src="images/115.jpg" />
       </q-carousel>
       <div
-        v-for="index in 3"
-        :key="index"
+        v-for="(item, i) in newsData.news"
+        :key="i"
         class="flex-row"
         style="
           gap: 10px;
@@ -36,21 +36,17 @@
           padding: 20px 10px;
           border-radius: 20px;
         "
+        @click="openNewTab(item.url)"
       >
         <div class="flex-col">
           <q-img
-            src="images/112.jpg"
+            :src="item.image"
             style="width: 170px; height: 150px; border-radius: 20px"
           ></q-img>
         </div>
         <div class="flex-col" style="word-break: break-all">
-          <span style="font-weight: 600; color: #002245"
-            >โควิดวันนี้ พุ่ง 16,330 ราย กทม.หนักสุด 3,244 ราย</span
-          >
-          <span style="color: #002245"
-            >ศูนยข้อมูล COVID-19 รายงานสถานการณ์ การแพร่ระบาดของโควิด-19 วันนี้
-            12 กุมภาพันธ์ 2565 ยอดผู้ติดเชื้อรวม 16,330 ราย ...</span
-          >
+          <span style="font-weight: 600; color: #002245">{{ item.title }}</span>
+          <span style="color: #002245">{{ item.desc.substring(0, 110) }}</span>
         </div>
       </div>
     </div>
@@ -58,11 +54,22 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
+import { fetchNewsData } from "src/main";
 export default defineComponent({
   name: "NewPage",
   setup() {
+    const newsData = ref();
+
+    const openNewTab = (url) => {
+      window.open(url);
+    };
+    onMounted(async () => {
+      newsData.value = await fetchNewsData();
+    });
     return {
+      newsData,
+      openNewTab,
       slide: ref(1),
     };
   },
