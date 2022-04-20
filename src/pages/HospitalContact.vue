@@ -13,7 +13,7 @@
         >
       </div>
     </div>
-    <div class="flex-col q-gutter-y-lg">
+    <div class="flex-col q-gutter-y-lg" v-if="hospitalCenter">
       <div class="row">
         <span
           style="
@@ -33,7 +33,7 @@
           class="flex row justify-center q-gutter-x-md q-gutter-y-lg"
           style="width: 100%; flex-wrap: wrap; margin-top: 2px"
         >
-          <div v-for="index in 2" :key="index">
+          <div v-for="(item, index) in hospitalCenter" :key="index">
             <div
               @click="pushPage()"
               style="
@@ -43,7 +43,7 @@
               "
             >
               <div class="col">
-                <q-img src="images/hospital.png" style="width: 350px" />
+                <q-img :src="item.image" style="width: 350px" />
               </div>
             </div>
             <div class="row justify-center">
@@ -58,13 +58,13 @@
                   border-radius: 0 0 10px 10px;
                   background-color: #002245;
                 "
-                >โรงพยาบาล</span
+                >{{ item.name }}</span
               >
             </div>
           </div>
         </div>
       </div>
-      <div class="flex-col">
+      <div class="flex-col" v-if="hospitalCommunity">
         <div class="row">
           <span
             style="
@@ -80,11 +80,12 @@
             "
             >โรงพยาบาลชุมชน
           </span>
+
           <div
             class="flex row justify-center q-gutter-x-md q-gutter-y-lg"
             style="width: 100%; flex-wrap: wrap; margin-top: 2px"
           >
-            <div v-for="index in 2" :key="index">
+            <div v-for="(item, index) in hospitalCommunity" :key="index">
               <div
                 @click="pushPage()"
                 style="
@@ -94,7 +95,7 @@
                 "
               >
                 <div class="col">
-                  <q-img src="images/hospital.png" style="width: 350px" />
+                  <q-img :src="item.image" style="width: 350px" />
                 </div>
               </div>
               <div class="row justify-center">
@@ -109,14 +110,14 @@
                     border-radius: 0 0 10px 10px;
                     background-color: #002245;
                   "
-                  >โรงพยาบาล</span
+                  >{{ item.name }}</span
                 >
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="flex-col">
+      <div class="flex-col" v-if="hospitalPrivate">
         <div class="row">
           <span
             style="
@@ -132,11 +133,12 @@
             "
             >โรงพยาบาลเอกชน</span
           >
+
           <div
             class="flex row justify-center q-gutter-x-md q-gutter-y-lg"
             style="width: 100%; flex-wrap: wrap; margin-top: 2px"
           >
-            <div v-for="index in 2" :key="index">
+            <div v-for="(item, index) in hospitalPrivate" :key="index">
               <div
                 @click="pushPage()"
                 style="
@@ -146,7 +148,7 @@
                 "
               >
                 <div class="col">
-                  <q-img src="images/hospital.png" style="width: 350px" />
+                  <q-img :src="item.image" style="width: 350px" />
                 </div>
               </div>
               <div class="row justify-center">
@@ -161,7 +163,7 @@
                     border-radius: 0 0 10px 10px;
                     background-color: #002245;
                   "
-                  >โรงพยาบาล</span
+                  >{{ item.name }}</span
                 >
               </div>
             </div>
@@ -174,16 +176,39 @@
 
 <script>
 import { useRouter } from "vue-router";
-import { defineComponent } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
+import { fetchHopitalData } from "src/main";
 export default defineComponent({
   name: "HospitalContact",
 
   setup() {
+    const hospitalData = ref();
+    const hospitalCenter = ref();
+    const hospitalCommunity = ref();
+    const hospitalPrivate = ref();
     const router = useRouter();
     const pushPage = () => {
       void router.push({ path: "hospital-detail" });
     };
-    return { pushPage };
+    onMounted(async () => {
+      hospitalData.value = await fetchHopitalData();
+      hospitalCenter.value = hospitalData.value.hospital.filter(
+        (data) => data.id == "1"
+      );
+      hospitalCommunity.value = hospitalData.value.hospital.filter(
+        (data) => data.id == "2"
+      );
+      hospitalPrivate.value = hospitalData.value.hospital.filter(
+        (data) => data.id == "3"
+      );
+    });
+    return {
+      hospitalData,
+      hospitalCenter,
+      hospitalCommunity,
+      hospitalPrivate,
+      pushPage,
+    };
   },
 });
 </script>

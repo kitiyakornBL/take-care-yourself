@@ -24,4 +24,12 @@ const fetchNewsData = async () => {
   return { news };
 };
 
-export { fetchNewsData };
+const fetchHopitalData = async () => {
+  const data = collection(db, "hospital");
+  const hospitalList = await getDocs(data);
+  const hospital = hospitalList.docs.map((doc) => doc.data());
+  return {hospital};
+};
+
+export { fetchNewsData, fetchHopitalData};
+
