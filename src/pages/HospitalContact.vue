@@ -35,7 +35,7 @@
         >
           <div v-for="(item, index) in hospitalCenter" :key="index">
             <div
-              @click="pushPage()"
+              @click="pushPage(item.name)"
               style="
                 background-color: #f2f2f2;
                 padding: 15px;
@@ -87,7 +87,7 @@
           >
             <div v-for="(item, index) in hospitalCommunity" :key="index">
               <div
-                @click="pushPage()"
+                @click="pushPage(item.name)"
                 style="
                   background-color: #f2f2f2;
                   padding: 15px;
@@ -140,7 +140,7 @@
           >
             <div v-for="(item, index) in hospitalPrivate" :key="index">
               <div
-                @click="pushPage()"
+                @click="pushPage(item.name)"
                 style="
                   background-color: #f2f2f2;
                   padding: 15px;
@@ -187,8 +187,8 @@ export default defineComponent({
     const hospitalCommunity = ref();
     const hospitalPrivate = ref();
     const router = useRouter();
-    const pushPage = () => {
-      void router.push({ path: "hospital-detail" });
+    const pushPage = (name) => {
+      void router.push({ path: "hospital-detail", query: { name } });
     };
     onMounted(async () => {
       hospitalData.value = await fetchHopitalData();

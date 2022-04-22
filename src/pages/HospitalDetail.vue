@@ -15,43 +15,53 @@
       "
     >
     </q-btn>
-    <q-img src="images/hospital.png" style="margin-bottom: 20px" />
-    <div class="q-gutter-y-md">
+
+    <div class="q-gutter-y-md" v-if="hospitalDetail">
+      <q-img :src="hospitalDetail.image" style="margin-bottom: 20px" />
       <div class="text-desc" style="font-weight: 900; font-size: 22px">
-        <span>โรงพยาบาลป่าตอง</span>
+        <span>{{ hospitalDetail.name }}</span>
       </div>
       <div class="text-desc">
         <q-icon name="home" />
-        <span>57 ถ.ไสน้ำเย็น ต.ป่าตอง อ.กะทู้ จ.ภูเก็ต 83150 </span>
+        <span>{{ hospitalDetail.location }} </span>
       </div>
       <div class="text-desc">
         <q-icon name="home" />
-        <span>57 ถ.ไสน้ำเย็น ต.ป่าตอง อ.กะทู้ จ.ภูเก็ต 83150 </span>
+        <span>{{ hospitalDetail.facebook }}</span>
       </div>
       <div class="text-desc">
         <q-icon name="home" />
-        <span>www.patonghospital.go.th/main/</span>
-      </div>
-      <div class="text-desc">
-        <q-icon name="home" />
-        <span>www.facebook.com/patonghospital/</span>
-      </div>
-      <div class="text-desc">
-        <q-icon name="home" />
-        <span>+66 76 342 633-4</span>
-      </div>
-      <div class="text-desc">
-        <q-icon name="home" />
-        <span>076-342633</span>
+        <span>{{ hospitalDetail.tel }}</span>
       </div>
     </div>
   </q-page>
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import { fetchHopitalData } from "src/main";
 export default defineComponent({
   name: "HospitalDetail",
+  setup() {
+    const route = useRoute();
+    const name = ref();
+    const hospitalDetail = ref();
+    const hospitalData = ref();
+    onMounted(async () => {
+      hospitalData.value = await fetchHopitalData();
+      name.value = route.query.name;
+      if (name.value) {
+        hospitalDetail.value = hospitalData.value.hospital.find(
+          (data) => data.name == name.value
+        );
+      }
+    });
+    return {
+      name,
+      hospitalDetail,
+    };
+  },
 });
 </script>
 
