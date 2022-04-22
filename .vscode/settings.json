@@ -10,5 +10,8 @@
   },
   "[vue]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "ms-vsliveshare.vsliveshare"
   }
 }

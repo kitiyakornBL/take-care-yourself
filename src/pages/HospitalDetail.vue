@@ -15,7 +15,6 @@
       "
     >
     </q-btn>
-
     <div class="q-gutter-y-md" v-if="hospitalDetail">
       <q-img :src="hospitalDetail.image" style="margin-bottom: 20px" />
       <div class="text-desc" style="font-weight: 900; font-size: 22px">
@@ -27,7 +26,9 @@
       </div>
       <div class="text-desc">
         <q-icon name="home" />
-        <span>{{ hospitalDetail.facebook }}</span>
+        <a class="editText" :href="hospitalDetail.facebook" target="_blank"
+          >{{ hospitalDetail.facebook.substring(0, 30) }}...</a
+        >
       </div>
       <div class="text-desc">
         <q-icon name="home" />
@@ -69,5 +70,9 @@ export default defineComponent({
 .text-desc {
   color: #002245;
   font-size: 18px;
+}
+.editText {
+  color: #002245;
+  text-decoration: none;
 }
 </style>
