@@ -26,84 +26,55 @@
         >
       </div>
     </div>
-    <div class="flex-row" style="gap: 1rem">
+    <div v-if="covidToday">
       <div
-        @click="showDateDialog = true"
-        class="flex justiflex-center items-center"
-        style="
-          border-radius: 4px;
-          background-color: #f2f2f2;
-          width: 100%;
-          height: 40px;
-          margin-bottom: 10px;
-          padding: 0 13px;
-        "
+        class="flex-row"
+        style="margin-bottom: 1rem"
+        v-for="(items, i) in static_list"
+        :key="i"
       >
-        <span style="font-weight: 900; color: #a4a4a4">
-          {{ date }}
-        </span>
-        <q-icon
-          class="flex"
-          style="margin-left: auto; font-size: 25px; color: #002245"
-          name="event"
-        />
-      </div>
-    </div>
-    <div
-      class="flex-row"
-      style="margin-bottom: 1rem"
-      v-for="(items, i) in static_list"
-      :key="i"
-    >
-      <div class="static-card w-full text-white" :style="color_list[i]">
-        <div
-          class="flex-row justify-between"
-          style="font-weight: 900; font-size: 16px"
-        >
-          {{ items.title }} <q-img :src="items.icon" alt="" width="25px" />
-        </div>
-        <div
-          class="flex-row justify-center"
-          style="font-size: 36px; font-weight: 500"
-        >
-          {{ items.new }}
-        </div>
-        <div
-          class="flex-row text-black justify-between items-center"
-          style="
-            font-weight: 700;
-            font-size: 15px;
-            padding: 5px;
-            border-radius: 5px;
-            background: white;
-          "
-        >
-          <div class="flex-row" style="flex-wrap: nowrap">
-            <q-img src="images/26.png" width="24px" style="margin-right: 3px" />
-            สะสม
+        <div class="static-card w-full text-white" :style="color_list[i]">
+          <div
+            class="flex-row justify-between"
+            style="font-weight: 900; font-size: 16px"
+          >
+            {{ items.title }} <q-img :src="items.icon" alt="" width="25px" />
           </div>
-          <span>{{ items.total }} คน</span>
+          <div
+            class="flex-row justify-center"
+            style="font-size: 36px; font-weight: 500"
+          >
+            {{ items.new }}
+          </div>
+          <div
+            class="flex-row text-black justify-between items-center"
+            style="
+              font-weight: 700;
+              font-size: 15px;
+              padding: 5px;
+              border-radius: 5px;
+              background: white;
+            "
+          >
+            <div class="flex-row" style="flex-wrap: nowrap">
+              <q-img
+                src="images/26.png"
+                width="24px"
+                style="margin-right: 3px"
+              />
+              สะสม
+            </div>
+            <span>{{ items.total }} คน</span>
+          </div>
         </div>
       </div>
     </div>
-
-    <q-dialog v-model="showDateDialog" position="bottom">
-      <q-card style="border-radius: 20px 20px 0 0">
-        <q-card-section>
-          <q-date
-            style="box-shadow: none; width: 100%"
-            v-model="date"
-            minimal
-          />
-        </q-card-section>
-      </q-card>
-    </q-dialog>
   </q-page>
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
-import dayjs from "dayjs";
+import { defineComponent, ref, onMounted } from "vue";
+import { covidService } from "src/services/covid-service";
 export default defineComponent({
   name: "StaticAllPage",
 
@@ -125,36 +96,44 @@ export default defineComponent({
     const static_list = [
       {
         title: "จำนวนผู้ติดเชื้อรายใหม่",
-        new: "8444",
-        total: "2432534",
+        new: "",
+        total: "",
         icon: "images/5.png",
       },
       {
         title: "หายแล้ว",
-        new: "7829",
-        total: "2432534",
+        new: "",
+        total: "",
         icon: "images/8.png",
       },
       {
-        title: "กำลังรักษา",
-        new: "603",
-        total: "84542",
+        title: "เฉพาะคนไทยรายใหม่",
+        new: "",
+        total: "",
         icon: "images/25.png",
       },
       {
-        title: "กำลังรักษา",
-        new: "603",
-        total: "84542",
+        title: "เสียชีวิต",
+        new: "",
+        total: "",
         icon: "images/24.png",
       },
     ];
+    const covidToday = ref();
 
-    const showDateDialog = ref(false);
-
-    const date = ref(dayjs(Date.now()).format("YYYY/MM/DD"));
+    onMounted(async () => {
+      covidToday.value = await covidService.fetchCovidToday();
+      static_list[0].new = covidToday.value.new_case;
+      static_list[0].total = covidToday.value.new_recovered;
+      static_list[1].new = covidToday.value.total_recovered;
+      static_list[1].total = covidToday.value.total_case;
+      static_list[2].new = covidToday.value.new_case_excludeabroad;
+      static_list[2].total = covidToday.value.total_case_excludeabroad;
+      static_list[3].new = covidToday.value.new_death;
+      static_list[3].total = covidToday.value.total_death;
+    });
     return {
-      showDateDialog,
-      date,
+      covidToday,
       static_list,
       color_list,
     };

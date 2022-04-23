@@ -26,80 +26,14 @@
       </div>
     </div>
     <div class="flex-col">
-      <div class="flex-row" style="gap: 1rem">
-        <div
-          @click="showDateDialog = true"
-          class="flex justiflex-center items-center"
-          style="
-            border-radius: 4px;
-            background-color: #f2f2f2;
-            width: 50%;
-            height: 40px;
-            margin-bottom: 10px;
-            padding: 0 13px;
-          "
-        >
-          <span style="font-weight: 900; color: #a4a4a4">
-            {{ date }}
-          </span>
-          <q-icon
-            class="flex"
-            style="margin-left: auto; font-size: 25px; color: #002245"
-            name="event"
-          />
-        </div>
-        <div
-          @click="showAreaSecDialog = true"
-          class="flex justiflex-center items-center"
-          style="
-            border-radius: 4px;
-            background-color: #f2f2f2;
-            width: 50%;
-            height: 40px;
-            margin-bottom: 10px;
-            padding: 0 13px;
-          "
-        >
-          <span style="font-weight: 900; color: #a4a4a4">
-            {{ areaSecValue }}
-          </span>
-          <q-icon
-            class="flex"
-            style="margin-left: auto; font-size: 25px; color: #002245"
-            name="keyboard_arrow_down"
-          />
-        </div>
-      </div>
-      <div class="flex-row" style="gap: 1rem">
-        <div
-          @click="showAreaDialog = true"
-          class="flex justiflex-center items-center"
-          style="
-            border-radius: 4px;
-            background-color: #f2f2f2;
-            width: 50%;
-            height: 40px;
-            margin-bottom: 10px;
-            padding: 0 13px;
-            flex-wrap: nowrap;
-          "
-        >
-          <span style="font-weight: 900; color: #a4a4a4">
-            {{ areaValue }}
-          </span>
-          <q-icon
-            class="flex"
-            style="margin-left: auto; font-size: 25px; color: #002245"
-            name="keyboard_arrow_down"
-          />
-        </div>
+      <div class="flex-row">
         <div
           @click="showProvinceDialog = true"
           class="flex justiflex-center items-center"
           style="
             border-radius: 4px;
             background-color: #f2f2f2;
-            width: 50%;
+            width: 100%;
             height: 40px;
             margin-bottom: 10px;
             padding: 0 13px;
@@ -117,76 +51,51 @@
         </div>
       </div>
     </div>
-
-    <div
-      class="flex-row"
-      style="margin-bottom: 1rem"
-      v-for="(items, i) in static_list"
-      :key="i"
-    >
-      <div class="static-card w-full text-white" :style="color_list[i]">
-        <div
-          class="flex-row justify-between"
-          style="font-weight: 900; font-size: 16px"
-        >
-          {{ items.title }} <q-img :src="items.icon" alt="" width="25px" />
-        </div>
-        <div
-          class="flex-row justify-center"
-          style="font-size: 36px; font-weight: 500"
-        >
-          {{ items.new }}
-        </div>
-        <div
-          class="flex-row text-black justify-between items-center"
-          style="
-            font-weight: 700;
-            font-size: 15px;
-            padding: 5px;
-            border-radius: 5px;
-            background: white;
-          "
-        >
-          <div class="flex-row" style="flex-wrap: nowrap">
-            <q-img src="images/26.png" width="24px" style="margin-right: 3px" />
-            สะสม
+    <div v-if="selectedCovidData">
+      <div
+        class="flex-row"
+        style="margin-bottom: 1rem"
+        v-for="(items, i) in static_list"
+        :key="i"
+      >
+        <div class="static-card w-full text-white" :style="color_list[i]">
+          <div
+            class="flex-row justify-between"
+            style="font-weight: 900; font-size: 16px"
+          >
+            {{ items.title }} <q-img :src="items.icon" alt="" width="25px" />
           </div>
-          <span>{{ items.total }} คน</span>
+          <div
+            class="flex-row justify-center"
+            style="font-size: 36px; font-weight: 500"
+          >
+            {{ items.new }}
+          </div>
+          <div
+            class="flex-row text-black justify-between items-center"
+            style="
+              font-weight: 700;
+              font-size: 15px;
+              padding: 5px;
+              border-radius: 5px;
+              background: white;
+            "
+          >
+            <div class="flex-row" style="flex-wrap: nowrap">
+              <q-img
+                src="images/26.png"
+                width="24px"
+                style="margin-right: 3px"
+              />
+              สะสม
+            </div>
+            <span>{{ items.total }} คน</span>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- dialog -->
-    <q-dialog v-model="showAreaSecDialog" position="bottom">
-      <q-card style="border-radius: 20px 20px 0 0">
-        <q-card-section class="flex justify-center">
-          <div class="black-bar"></div>
-        </q-card-section>
-        <q-card-section>
-          <div class="area-sec">--เลือกเขตสุขภาพ--</div>
-        </q-card-section>
-        <q-card-section v-for="(items, i) in area_sec" :key="i">
-          <div @click="getAreaSec(i)" v-ripple class="area-sec">
-            {{ items.name }}
-          </div>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
-    <q-dialog v-model="showAreaDialog" position="bottom">
-      <q-card style="border-radius: 20px 20px 0 0">
-        <q-card-section class="flex justify-center">
-          <div class="black-bar"></div>
-        </q-card-section>
-        <q-card-section>
-          <div class="area-sec">--เลือกภูมิภาค--</div>
-        </q-card-section>
-        <q-card-section v-for="(items, i) in area" :key="i">
-          <div @click="getArea(i)" v-ripple class="area-sec">
-            {{ items.name }}
-          </div>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
     <q-dialog v-model="showProvinceDialog" position="bottom">
       <q-card style="border-radius: 20px 20px 0 0">
         <q-card-section class="flex justify-center">
@@ -195,31 +104,35 @@
         <q-card-section>
           <div class="area-sec">--เลือกจังหวัด--</div>
         </q-card-section>
-        <q-card-section v-for="(items, i) in province" :key="i">
-          <div @click="getProvince(i)" v-ripple class="area-sec">
-            {{ items.name }}
-          </div>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
-
-    <q-dialog v-model="showDateDialog" position="bottom">
-      <q-card style="border-radius: 20px 20px 0 0">
-        <q-card-section>
-          <q-date
-            style="box-shadow: none; width: 100%"
-            v-model="date"
-            minimal
-          />
-        </q-card-section>
+        <q-select
+          behavior="menu"
+          filled
+          v-model="model"
+          use-input
+          hide-selected
+          fill-input
+          input-debounce="0"
+          :options="options"
+          @filter="filterFn"
+          @update:model-value="getProvince(model)"
+          style="padding: 0 10px; padding-bottom: 32px"
+        >
+          <template v-slot:no-option>
+            <q-item>
+              <q-item-section class="text-grey">
+                ไม่มีจังหวัดที่ค้นหา
+              </q-item-section>
+            </q-item>
+          </template>
+        </q-select>
       </q-card>
     </q-dialog>
   </q-page>
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
-import dayjs from "dayjs";
+import { defineComponent, ref, onMounted } from "vue";
+import { covidService } from "src/services/covid-service";
 export default defineComponent({
   name: "StaticEachPage",
 
@@ -227,9 +140,6 @@ export default defineComponent({
     const color_list = [
       {
         background: "#FE5472",
-      },
-      {
-        background: "#039245",
       },
       {
         background: "#87C7C7",
@@ -241,119 +151,225 @@ export default defineComponent({
     const static_list = [
       {
         title: "จำนวนผู้ติดเชื้อรายใหม่",
-        new: "8444",
-        total: "2432534",
+        new: "",
+        total: "",
         icon: "images/5.png",
       },
       {
-        title: "หายแล้ว",
-        new: "7829",
-        total: "2432534",
-        icon: "images/8.png",
-      },
-      {
-        title: "กำลังรักษา",
-        new: "603",
-        total: "84542",
+        title: "เฉพาะคนไทยรายใหม่",
+        new: "",
+        total: "",
         icon: "images/25.png",
       },
       {
-        title: "กำลังรักษา",
-        new: "603",
-        total: "84542",
+        title: "เสียชีวิต",
+        new: "",
+        total: "",
         icon: "images/24.png",
       },
     ];
-    const area_sec = [
-      {
-        name: "เขต 1",
-      },
-      {
-        name: "เขต 2",
-      },
-      {
-        name: "เขต 3",
-      },
-      {
-        name: "เขต 4",
-      },
-      {
-        name: "เขต 5",
-      },
-      {
-        name: "เขต 6",
-      },
-    ];
-    const area = [
-      {
-        name: "กรุงเทพมหานคร และ ปริมณฑล",
-      },
-      {
-        name: "ภาคกลาง",
-      },
-      {
-        name: "ภาคเหนือ",
-      },
-      {
-        name: "ภาคตะวันออกเฉียงเหนือ",
-      },
-      {
-        name: "ภาคตะวันออก",
-      },
-      {
-        name: "ภาคตะวันตก",
-      },
-    ];
     const province = [
-      {
-        name: "กรุงเทพมหานคร และ ปริมณฑล",
-      },
-      {
-        name: "ปทุมธานี",
-      },
-      {
-        name: "ชลบุรี",
-      },
-      {
-        name: "พังงา",
-      },
-      {
-        name: "กระบี่",
-      },
-      {
-        name: "นครศรีธรรมราช",
-      },
+      "กระบี่",
+
+      "กรุงเทพมหานคร",
+
+      "กาญจนบุรี",
+
+      "กาญจนบุรี",
+
+      "กำแพงเพชร",
+
+      "ขอนแก่น",
+
+      "จันทบุรี",
+
+      "ฉะเชิงเทรา",
+
+      "ชลบุรี",
+
+      "ชัยนาท",
+
+      "ชัยภูมิ",
+
+      "ชุมพร",
+
+      "ตรัง",
+
+      "ตราด",
+
+      "ตาก",
+
+      "นครนายก",
+
+      "นครปฐม",
+
+      "นครพนม",
+
+      "นครราชสีมา",
+
+      "นครศรีธรรมราช",
+
+      "นครสวรรค์",
+
+      "นนทบุรี",
+
+      "นราธิวาส",
+
+      "น่าน",
+
+      "บึงกาฬ",
+
+      "บุรีรัมย์",
+
+      "ปทุมธานี",
+
+      "ประจวบคีรีขันธ์",
+
+      "ปราจีนบุรี",
+
+      "ปัตตานี",
+
+      "พระนครศรีอยุธยา",
+
+      "พะเยา",
+
+      "พังงา",
+
+      "พัทลุง",
+
+      "พิจิตร",
+
+      "พิษณุโลก",
+
+      "ภูเก็ต",
+
+      "มหาสารคาม",
+
+      "มุกดาหาร",
+
+      "ยะลา",
+
+      "ยโสธร",
+
+      "ร้อยเอ็ด",
+
+      "ระนอง",
+
+      "ระยอง",
+
+      "ราชบุรี",
+
+      "ลพบุรี",
+
+      "ลำปาง",
+
+      "ลำพูน",
+
+      "ศรีสะเกษ",
+
+      "สกลนคร",
+
+      "สงขลา",
+
+      "สตูล",
+
+      "สมุทรปราการ",
+
+      "สมุทรสงคราม",
+
+      "สมุทรสาคร",
+
+      "สระบุรี",
+
+      "สระแก้ว",
+
+      "สิงห์บุรี",
+
+      "สุพรรณบุรี",
+
+      "สุราษฎร์ธานี",
+
+      "สุรินทร์",
+
+      "สุโขทัย",
+
+      "หนองคาย",
+
+      "หนองบัวลำภู",
+
+      "อ่างทอง",
+
+      "อำนาจเจริญ",
+
+      "อุดรธานี",
+
+      "อุตรดิตถ์",
+
+      "อุทัยธานี",
+
+      "อุบลราชธานี",
+
+      "เชียงราย",
+
+      "เชียงใหม่",
+
+      "เพชรบุรี",
+
+      "เพชรบูรณ์",
+
+      "เลย",
+
+      "แพร่",
+
+      "แม่ฮ่องสอน",
     ];
-    const areaValue = ref("เลือกภูมิภาค");
-    const showDateDialog = ref(false);
-    const showAreaSecDialog = ref(false);
-    const showAreaDialog = ref(false);
+    const selectedCovidData = ref();
     const showProvinceDialog = ref(false);
-    const areaSecValue = ref("เลือกเขตสุขภาพ");
-    const provinceValue = ref("เลือกจังหวัด");
-    const getAreaSec = (i) => {
-      areaSecValue.value = area_sec[i].name;
-    };
+    const model = ref("");
+    const covidData = ref();
+    const provinceValue = ref("กรุงเทพมหานคร");
     const getArea = (i) => {
       areaValue.value = area[i].name;
     };
     const getProvince = (i) => {
-      provinceValue.value = province[i].name;
+      provinceValue.value = i;
+      fetchCovidByProvines();
     };
-    const date = ref(dayjs(Date.now()).format("YYYY/MM/DD"));
+    const options = ref(province);
+    const fetchCovidByProvines = async () => {
+      selectedCovidData.value = covidData.value.filter(
+        (res) => res.province == provinceValue.value
+      )[0];
+      static_list[0].new = selectedCovidData.value?.new_case;
+      static_list[0].total = selectedCovidData.value?.total_case;
+      static_list[1].new = selectedCovidData.value?.new_case_excludeabroad;
+      static_list[1].total = selectedCovidData.value?.total_case_excludeabroad;
+      static_list[2].new = selectedCovidData.value?.new_death;
+      static_list[2].total = selectedCovidData.value?.total_death;
+    };
+
+    onMounted(async () => {
+      covidData.value = await covidService.fetchCovidByProvinces();
+      fetchCovidByProvines();
+    });
     return {
-      showDateDialog,
-      date,
-      showAreaSecDialog,
-      area_sec,
-      getAreaSec,
-      areaSecValue,
-      showAreaDialog,
-      getArea,
-      area,
-      areaValue,
+      filterFn(val, update, abort) {
+        if (val.length < 2) {
+          abort();
+          return;
+        }
+        update(() => {
+          const needle = val.toLowerCase();
+          options.value = province.filter(
+            (v) => v.toLowerCase().indexOf(needle) > -1
+          );
+        });
+      },
       province,
+      model,
+      options,
       provinceValue,
+      selectedCovidData,
       getProvince,
       showProvinceDialog,
       static_list,
