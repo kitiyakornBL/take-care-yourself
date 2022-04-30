@@ -1,5 +1,14 @@
+import * as firebaseAuth from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
+import { createApp } from "vue";
+import { createPinia } from "pinia";
+import App from "./App.vue";
+
+const apps = createApp(App);
+const pinia = createPinia();
+
+apps.use(pinia);
 // import "firebase/auth";
 
 const firebaseConfig = {
@@ -12,10 +21,35 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = firebaseAuth.getAuth(app);
 const db = getFirestore(app);
 // const auth = firebase.auth();
 
-//-----------------------------------------------------------------------
+//------------------------- Credentail ----------------------------------------------
+
+const LoginWithFirebase = async (email, password) => {
+  try {
+    const provider = await firebaseAuth.signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    return provider;
+  } catch (e) {
+    alert(e);
+  }
+};
+
+const LoginWithGoogle = async () => {
+  try {
+    const googleProvider = new firebaseAuth.GoogleAuthProvider();
+    return await firebaseAuth.signInWithPopup(auth, googleProvider);
+  } catch (e) {
+    alert(e);
+  }
+};
+
+//------------------------ Mange Data -----------------------------------------------
 
 const fetchNewsData = async () => {
   const data = collection(db, "news");
@@ -28,8 +62,7 @@ const fetchHopitalData = async () => {
   const data = collection(db, "hospital");
   const hospitalList = await getDocs(data);
   const hospital = hospitalList.docs.map((doc) => doc.data());
-  return {hospital};
+  return { hospital };
 };
 
-export { fetchNewsData, fetchHopitalData};
-
+export { fetchNewsData, fetchHopitalData, LoginWithGoogle, LoginWithFirebase };

@@ -1,4 +1,5 @@
 <template>
+  {{ account }}
   <div
     class="justify-center"
     :class="onChangeBg == true ? '' : 'bg'"
@@ -66,15 +67,18 @@
         </q-btn>
         <q-input
           outlined
+          v-model="email"
           placeholder="อีเมล"
           style="background-color: #f7f8fa; border: none"
         ></q-input>
         <q-input
+          v-model="password"
           outlined
           placeholder="รหัสผ่าน"
           style="background-color: #f7f8fa; border: none"
         ></q-input>
         <q-btn
+          @click="login()"
           unelevated
           class="bg-white"
           style="
@@ -162,16 +166,38 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, computed } from "vue";
+import { useOnsaveAccount } from "src/pinia-store/account";
+import { LoginWithFirebase } from "src/main";
 export default defineComponent({
   name: "LoginPage",
 
   setup() {
+    //manage layout
     const isShowGetStart = ref(true);
     const onChangeBg = ref(true);
     const isShowLogin = ref(false);
     const isShowRegister = ref(false);
 
+    //manage data
+    const email = ref("");
+    const password = ref("");
+    const accountPinia = useOnsaveAccount();
+    const account = computed(() => accountPinia.account);
+
+    //firebase
+    const login = async () => {
+      const user = await LoginWithFirebase(email.value, password.value);
+      if (user.user) {
+        const userDetail = {
+          name: user.user.email,
+          uid: user.user.uid,
+        };
+        accountPinia.onSaveAccount(userDetail);
+      }
+    };
+
+    //push page
     const pushToLogin = () => {
       console.log("1");
       isShowGetStart.value = false;
@@ -196,9 +222,13 @@ export default defineComponent({
       isShowGetStart,
       isShowLogin,
       isShowRegister,
+      email,
+      password,
+      account,
       backToLogin,
       pushToLogin,
       pustToregister,
+      login,
     };
   },
 });
