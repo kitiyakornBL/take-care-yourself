@@ -41,6 +41,26 @@
           v-bind="link"
           @onChangeTitle="onChangeTitle"
         />
+        <q-item
+          clickable
+          style="
+            background-color: #f8f7fa;
+            border-radius: 8px;
+            margin: 20px 20px;
+          "
+          @click="logout()"
+        >
+          <q-item-section avatar>
+            <q-icon name="logout" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label
+              style="color: #002245; font-size: 18px; font-weight: bold"
+              >ออกจากระบบ</q-item-label
+            >
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
@@ -51,6 +71,7 @@
 </template>
 
 <script>
+import { auth } from "../boot/firebase";
 import { defineComponent, ref } from "vue";
 import EssentialLink from "components/EssentialLink.vue";
 
@@ -105,7 +126,14 @@ export default defineComponent({
     const onChangeTitle = (newTitle) => {
       title.value = newTitle;
     };
+    const logout = () => {
+      auth
+        .signOut()
+        .then(() => console.log("Signed Out"))
+        .catch((err) => alert(err.message));
+    };
     return {
+      logout,
       onChangeTitle,
       title,
       essentialLinks: linksList,

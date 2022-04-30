@@ -55,7 +55,7 @@
 
 <script>
 import { defineComponent, ref, onMounted } from "vue";
-import { fetchNewsData } from "src/main";
+import { fetchNewsData } from "src/boot/firebase";
 export default defineComponent({
   name: "NewPage",
   setup() {

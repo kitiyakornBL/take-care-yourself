@@ -177,7 +177,7 @@
 <script>
 import { useRouter } from "vue-router";
 import { defineComponent, ref, onMounted } from "vue";
-import { fetchHopitalData } from "src/main";
+import { fetchHopitalData } from "src/boot/firebase";
 export default defineComponent({
   name: "HospitalContact",
 

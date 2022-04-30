@@ -1,5 +1,4 @@
 <template>
-  {{ account }}
   <div
     class="justify-center"
     :class="onChangeBg == true ? '' : 'bg'"
@@ -57,7 +56,11 @@
           bottom: 0;
         "
       >
-        <q-btn style="width: 100%" label="Sign In With Google">
+        <q-btn
+          @click="loginWithGoogle"
+          style="width: 100%"
+          label="Sign In With Google"
+        >
           <img
             class="q-ml-md"
             src="icons/google.png"
@@ -132,7 +135,11 @@
           bottom: 0;
         "
       >
-        <q-btn style="width: 100%" label="Sign In With Google">
+        <q-btn
+          @click="loginWithGoogle"
+          style="width: 100%"
+          label="Sign In With Google"
+        >
           <img
             class="q-ml-md"
             src="icons/google.png"
@@ -141,11 +148,13 @@
           />
         </q-btn>
         <q-input
+          v-model="email"
           outlined
           placeholder="อีเมล"
           style="background-color: #f7f8fa; border: none"
         ></q-input>
         <q-input
+          v-model="password"
           outlined
           placeholder="รหัสผ่าน"
           style="background-color: #f7f8fa; border: none"
@@ -156,6 +165,7 @@
           style="background-color: #f7f8fa; border: none"
         ></q-input>
         <q-btn
+          @click="registWithFirebase"
           unelevated
           style="width: 100%; color: white; background-color: #002245"
           label="สมัครสมาชิก"
@@ -168,7 +178,11 @@
 <script>
 import { defineComponent, ref, computed } from "vue";
 import { useOnsaveAccount } from "src/pinia-store/account";
-import { LoginWithFirebase } from "src/main";
+import {
+  LoginWithFirebase,
+  LoginWithGoogle,
+  RegistWithFirebase,
+} from "src/boot/firebase";
 export default defineComponent({
   name: "LoginPage",
 
@@ -197,9 +211,30 @@ export default defineComponent({
       }
     };
 
+    const loginWithGoogle = async () => {
+      try {
+        const loginWithGoogle = await LoginWithGoogle();
+        const userDetail = {
+          name: loginWithGoogle.user.displayName,
+          uid: loginWithGoogle.user.uid,
+        };
+        accountPinia.onSaveAccount(userDetail);
+      } catch (e) {
+        aleet(e);
+      }
+    };
+
+    const registWithFirebase = async () => {
+      try {
+        const regist = await RegistWithFirebase(email.value, password.value);
+        backToLogin();
+      } catch (e) {
+        alert(e);
+      }
+    };
+
     //push page
     const pushToLogin = () => {
-      console.log("1");
       isShowGetStart.value = false;
       onChangeBg.value = false;
       isShowLogin.value = true;
@@ -229,6 +264,8 @@ export default defineComponent({
       pushToLogin,
       pustToregister,
       login,
+      loginWithGoogle,
+      registWithFirebase,
     };
   },
 });

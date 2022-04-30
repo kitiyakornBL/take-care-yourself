@@ -1,6 +1,10 @@
 <template>
   <q-page style="padding: 0 20px 30px 20px">
-    <q-btn @click="$router.go(-1)" unelevated icon="chevron_left" style="
+    <q-btn
+      @click="$router.go(-1)"
+      unelevated
+      icon="chevron_left"
+      style="
         color: white;
         font-weight: 700;
         width: 40px;
@@ -8,21 +12,21 @@
         margin-bottom: 20px;
         border-radius: 10px;
         background-color: #04c5c9;
-      ">
+      "
+    >
     </q-btn>
     <div class="q-gutter-y-md" v-if="hospitalDetail">
       <q-img :src="hospitalDetail.image" style="margin-bottom: 20px" />
-      <div class="text-desc" style="font-weight: 900; font-size: 22px">
-
-      </div>
+      <div class="text-desc" style="font-weight: 900; font-size: 22px"></div>
       <div class="text-desc">
         <q-icon name="home" />
         <span>{{ hospitalDetail.location }} </span>
       </div>
       <div class="text-desc">
         <q-icon name="home" />
-        <a class="editText" :href="hospitalDetail.facebook" target="_blank">{{ hospitalDetail.facebook.substring(0, 30)
-        }}...</a>
+        <a class="editText" :href="hospitalDetail.facebook" target="_blank"
+          >{{ hospitalDetail.facebook.substring(0, 30) }}...</a
+        >
       </div>
       <div class="text-desc">
         <q-icon name="home" />
@@ -35,7 +39,7 @@
 <script>
 import { defineComponent, ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { fetchHopitalData } from "src/main";
+import { fetchHopitalData } from "src/boot/firebase";
 export default defineComponent({
   name: "HospitalDetail",
   setup() {
