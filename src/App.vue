@@ -5,6 +5,7 @@
 <script>
 import { useRoute, useRouter } from "vue-router";
 import { defineComponent, onMounted } from "vue";
+import { useOnsaveAccount } from "src/pinia-store/account";
 import { auth } from "./boot/firebase";
 
 export default defineComponent({
@@ -13,6 +14,7 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const route = useRoute();
+    const accountPinia = useOnsaveAccount();
 
     onMounted(() => {
       auth.onAuthStateChanged((user) => {
@@ -21,6 +23,12 @@ export default defineComponent({
           void router.replace("/login");
         } else {
           console.log(user);
+          const userDetail = {
+            name: user.email,
+            uid: user.uid,
+          };
+          accountPinia.onSaveAccount(userDetail);
+
           void router.replace("/");
         }
       });

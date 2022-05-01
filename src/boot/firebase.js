@@ -1,6 +1,8 @@
 import * as firebaseAuth from "firebase/auth";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { deleteDoc, setDoc, addDoc, doc } from "firebase/firestore";
+
 // import { createApp } from "vue";
 // import { createPinia } from "pinia";
 // import App from "src/App.vue";
@@ -70,6 +72,15 @@ const fetchNewsData = async () => {
   return { news };
 };
 
+const fetchTimeline = async () => {
+  const data = collection(db, "timeline");
+  const timelineList = await getDocs(data);
+  const timeline = timelineList.docs.map((doc) => doc.data());
+  const id = timelineList.docs.map((doc) => doc.id);
+  timeline.forEach((data, i) => (data.id = id[i]));
+  return { timeline };
+};
+
 const fetchHopitalData = async () => {
   const data = collection(db, "hospital");
   const hospitalList = await getDocs(data);
@@ -77,8 +88,25 @@ const fetchHopitalData = async () => {
   return { hospital };
 };
 
+const createTimeline = async (payload) => {
+  console.log(payload);
+  await addDoc(collection(db, "timeline"), { payload });
+  // await setDoc(doc(db, "timeline"), payload);
+  // console.log("successed");
+};
+
+const deleteTimeline = async (id) => {
+  console.log(id);
+  await deleteDoc(doc(db, "timeline", id));
+  // await setDoc(doc(db, "timeline"), payload);
+  // console.log("successed");
+};
+
 export {
   auth,
+  deleteTimeline,
+  createTimeline,
+  fetchTimeline,
   fetchNewsData,
   fetchHopitalData,
   LoginWithGoogle,

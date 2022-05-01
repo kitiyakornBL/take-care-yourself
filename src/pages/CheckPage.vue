@@ -1,5 +1,6 @@
 <template>
-  <q-page style="padding-bottom: 30px">
+  <q-page style="padding-bottom: 30px" v-if="data">
+    {{ data.timeline }}
     <div
       class="row"
       style="
@@ -179,13 +180,15 @@
 
 <script>
 import dayjs from "dayjs";
+import { fetchTimeline } from "src/boot/firebase";
 import { useQuasar } from "quasar";
-import { defineComponent, ref, watchEffect } from "vue";
+import { defineComponent, ref, watchEffect, onMounted } from "vue";
 export default defineComponent({
   name: "CheckPage",
   setup() {
     const date = ref(dayjs(Date.now()).format("YYYY/MM/DD"));
     const building = ref();
+    const data = ref();
     const allRoom = ref();
     const roomSelected = ref();
     const $q = useQuasar();
@@ -249,7 +252,12 @@ export default defineComponent({
       }
     });
 
+    onMounted(async () => {
+      data.value = await fetchTimeline();
+    });
+
     return {
+      data,
       buildingObtions,
       showDateDialog,
       showBuildingDialog,
