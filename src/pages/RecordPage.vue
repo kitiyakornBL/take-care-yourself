@@ -48,12 +48,8 @@
               <span style="font-weight: 900; color: #002245">ดูข้อมูล</span>
             </div>
           </div>
-          <div
-            @click="onDeleteTimeline(selectedData.id)"
-            class="cp; q-gutter-x-md"
-          >
+          <div @click="onDeleteTimeline(selectedData.id)" class="q-gutter-x-md">
             <div
-              class="q-mb-md"
               style="
                 border-radius: 7px;
                 border: solid 2px #002245;
@@ -68,9 +64,54 @@
     </q-dialog>
 
     <q-dialog v-model="dialogDetail">
-      <q-card>
-        <q-card-section class="q-gutter-y-md">
-          {{ selectedData }}
+      <q-card style="border-radius: 10px">
+        <q-card-section style="padding: 0">
+          <div
+            class="flex items-center q-pl-md"
+            style="
+              background-color: #f7f8fa;
+              width: 100%;
+              background-color: #002245;
+              border-radius: 10px 10px 0 0;
+              height: 40px;
+            "
+          >
+            <div class="text-white" style="font-weight: 900">
+              {{ onFormatDate(selectedData.payload.newdate) }}
+            </div>
+          </div>
+          <div
+            v-for="(item, i) in selectedData.payload.data"
+            :key="i"
+            style="
+              color: #002245;
+              font-weight: 700;
+              background-color: #f7f8fa;
+              padding: 10px;
+            "
+          >
+            <div class="flex-row q-gutter-x-md q-mb-md">
+              <q-icon style="display: block" name="schedule" />
+              <span>{{ item.date }}</span>
+            </div>
+            <div v-for="(item, i) in item.detail" :key="i">
+              <div class="flex-row q-gutter-x-md q-mb-md">
+                <q-icon style="display: block" name="building" />
+                <span>{{ item.location }}</span>
+              </div>
+              <div class="flex-row q-gutter-x-md q-mb-md">
+                <q-icon style="display: block" name="building" />
+                <span>{{ item.room }}</span>
+              </div>
+              <div
+                class="q-pa-sm q-mb-lg"
+                style="background-color: #e5e5e5; border-radius: 10px"
+              >
+                <span>หมายเหตุ : {{ item.desc }}</span>
+              </div>
+            </div>
+            <q-separator />
+          </div>
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -81,6 +122,8 @@
 import { fetchTimeline, deleteTimeline } from "src/boot/firebase";
 import { useOnsaveAccount } from "src/pinia-store/account";
 import { defineComponent, ref, onMounted, computed } from "vue";
+import dayjs from "dayjs";
+import "dayjs/locale/th";
 export default defineComponent({
   name: "RecordPage",
 
@@ -96,7 +139,6 @@ export default defineComponent({
     const onSelected = (item) => {
       showMenu.value = true;
       selectedData.value = item;
-      console.log(selectedData.value);
     };
 
     const onOpenDialogDetail = () => {
@@ -108,17 +150,21 @@ export default defineComponent({
       await deleteTimeline(id);
     };
 
+    const onFormatDate = (date) => {
+      return dayjs(date).locale("th").format("YYYY MMMM DD");
+    };
+
     onMounted(async () => {
       if (uid.value) {
         const allTimeline = await fetchTimeline();
         account_timeline.value = allTimeline.timeline.filter(
           (data) => data.payload.account_id == uid.value.uid
         );
-        console.log(account_timeline.value);
       }
     });
 
     return {
+      onFormatDate,
       timeLineList,
       onDeleteTimeline,
       account_timeline,

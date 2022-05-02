@@ -1,6 +1,6 @@
 <template>
   <q-page style="padding-bottom: 30px" v-if="data">
-    {{ data.timeline }}
+    <q-separator />
     <div
       class="row"
       style="
@@ -82,10 +82,11 @@
     </div>
 
     <div
+      v-if="onMapData"
       class="col q-gutter-y-md"
       style="padding: 0 10px; width: 100%; margin-top: 30px"
     >
-      <div v-for="index in 4" :key="index">
+      <div v-for="(item, i) in onMapData" :key="i">
         <div
           class="flex items-center q-pl-md"
           style="
@@ -96,9 +97,13 @@
             height: 40px;
           "
         >
-          <div class="text-white" style="font-weight: 900">4 มีนาคม 2022</div>
+          <div class="text-white" style="font-weight: 900">
+            {{ onFormatDate(item.payload.newdate) }}
+          </div>
         </div>
         <div
+          v-for="(item, i) in item.payload.data"
+          :key="i"
           style="
             color: #002245;
             font-weight: 700;
@@ -107,22 +112,26 @@
           "
         >
           <div class="flex-row q-gutter-x-md q-mb-md">
-            <q-icon style="display: block" name="building" />
-            <span>อาคาร 6 อาคารเรียนรวมและปฏิบัติการกลาง</span>
+            <q-icon style="display: block" name="schedule" />
+            <span>{{ item.date }}</span>
           </div>
-          <div class="flex-row q-gutter-x-md q-mb-md">
-            <q-icon style="display: block" name="building" />
-            <span>ห้อง 6120</span>
-          </div>
-          <div
-            class="q-pa-sm"
-            style="background-color: #e5e5e5; border-radius: 10px"
-          >
-            <span
-              >หมายเหตุ :
-              ได้มีการใกล้ชิดกับอาจารย์ผู้สอนและเพื่อนๆในห้องเรียน</span
+          <div v-for="(item, i) in item.detail" :key="i">
+            <div class="flex-row q-gutter-x-md q-mb-md">
+              <q-icon style="display: block" name="building" />
+              <span>{{ item.location }}</span>
+            </div>
+            <div class="flex-row q-gutter-x-md q-mb-md">
+              <q-icon style="display: block" name="building" />
+              <span>{{ item.room }}</span>
+            </div>
+            <div
+              class="q-pa-sm q-mb-lg"
+              style="background-color: #e5e5e5; border-radius: 10px"
             >
+              <span>หมายเหตุ : {{ item.desc }}</span>
+            </div>
           </div>
+          <q-separator />
         </div>
       </div>
     </div>
@@ -142,7 +151,7 @@
     <q-dialog v-model="showBuildingDialog" position="bottom">
       <q-card style="border-radius: 20px 20px 0 0; padding-top: 20px">
         <q-card-section class="q-gutter-y-md">
-          <div class="cp; q-gutter-x-md">
+          <div class="q-gutter-x-md">
             <div
               v-for="(item, index) in buildingObtions"
               :key="index"
@@ -180,6 +189,7 @@
 
 <script>
 import dayjs from "dayjs";
+import "dayjs/locale/th";
 import { fetchTimeline } from "src/boot/firebase";
 import { useQuasar } from "quasar";
 import { defineComponent, ref, watchEffect, onMounted } from "vue";
@@ -195,6 +205,7 @@ export default defineComponent({
     const showBuildingDialog = ref();
     const showRoomDialog = ref();
     const showDateDialog = ref(false);
+    const onMapData = ref();
     const buildingObtions = ref([
       "อาคาร 6 อาคารเรียนรวมและปฏิบัติการกลาง",
       "อาคาร 1A ภาควิชาวิศวกรรมคอมพิวเตอร์",
@@ -204,6 +215,10 @@ export default defineComponent({
       "สนามบาสเกตบอล",
       "โรงบำบัดน้ำเสีย",
     ]);
+
+    const onFormatDate = (date) => {
+      return dayjs(date).locale("th").format("YYYY MMMM DD");
+    };
 
     const checkBuilding = () => {
       if (allRoom.value) {
@@ -219,36 +234,63 @@ export default defineComponent({
       building.value = item;
       if (building.value == "อาคาร 6 อาคารเรียนรวมและปฏิบัติการกลาง") {
         allRoom.value = ["6130", "6152", "6223", "6355", "6211"];
-        roomSelected.value = "";
+        roomSelected.value = null;
       } else if (building.value == "อาคาร 1A ภาควิชาวิศวกรรมคอมพิวเตอร์") {
         allRoom.value = ["1130", "1152", "1223", "1355", "1211"];
-        roomSelected.value = "";
+        roomSelected.value = null;
       } else if (building.value == "อาคาร 2 คณะการบริการและการท่องเที่ยว") {
         allRoom.value = ["2130", "2152", "2223", "2355", "2211"];
-        roomSelected.value = "";
+        roomSelected.value = null;
       } else if (building.value == "โรงแรม พี เอส ยู ลอดจ์") {
         allRoom.value = ["001", "002", "003", "004", "005"];
-        roomSelected.value = "";
+        roomSelected.value = null;
       } else if (building.value == "ศูนย์อำนวยการร่วมรักษาความปลอดภัย") {
         allRoom.value = ["006", "007", "008", "009", "010"];
-        roomSelected.value = "";
+        roomSelected.value = null;
       } else if (building.value == "สนามบาสเกตบอล") {
         allRoom.value = ["โรงยิมเก่า", "เล้าไก่", "Sport Complex"];
-        roomSelected.value = "";
+        roomSelected.value = null;
       } else if (building.value == "โรงบำบัดน้ำเสีย") {
         allRoom.value = ["1e", "2e"];
-        roomSelected.value = "";
+        roomSelected.value = null;
       }
     };
 
     watchEffect(() => {
+      const payload = {
+        date: date.value,
+        building: building.value,
+        roomSelected: roomSelected.value,
+      };
+      if (date.value) {
+        onMapData.value = data.value?.timeline.filter((data) =>
+          data.payload.data.find((x) => x.date == payload.date)
+        );
+      }
+      if (date.value && building.value) {
+        console.log("test");
+        onMapData.value = data.value?.timeline.filter((data) =>
+          data.payload.data
+            .find((x) => x.date == payload.date)
+            ?.detail.find((x) => x.location == payload.building)
+        );
+      }
+      if (building.value) {
+        onMapData.value = data.value?.timeline.filter((data) =>
+          data.payload.data
+            .find((x) => x)
+            ?.detail.find((x) => x.location == payload.building)
+        );
+      }
       if (date.value && building.value && roomSelected.value) {
-        const payload = {
-          date: date.value,
-          building: building.value,
-          roomSelected: roomSelected.value,
-        };
-        console.log(payload);
+        onMapData.value = data.value?.timeline.filter((data) =>
+          data.payload.data
+            .find((x) => x.date == payload.date)
+            ?.detail.find(
+              (x) =>
+                x.location == payload.building && x.room == payload.roomSelected
+            )
+        );
       }
     });
 
@@ -258,8 +300,10 @@ export default defineComponent({
 
     return {
       data,
+      onMapData,
       buildingObtions,
       showDateDialog,
+      onFormatDate,
       showBuildingDialog,
       building,
       allRoom,

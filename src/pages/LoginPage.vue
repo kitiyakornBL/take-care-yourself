@@ -80,6 +80,7 @@
           placeholder="รหัสผ่าน"
           style="background-color: #f7f8fa; border: none"
         ></q-input>
+        <div @click="onReset"><span>ลืมรหัสผ่าน</span></div>
         <q-btn
           @click="login()"
           unelevated
@@ -173,12 +174,33 @@
       </div>
     </div>
   </div>
+  <q-dialog v-model="openDialog">
+    <q-card class="q-ma-md" style="width: 100%">
+      <q-card-section>
+        <div class="flex row justify-end items-center">
+          <q-input
+            placeholder="กรอกอีเมล"
+            style="width: 100%"
+            outlined
+            v-model="resetEmail"
+          />
+          <q-btn
+            class="q-mt-sm"
+            @click="onSentEmail"
+            style="margin-left: auto; color: white; background-color: #002245"
+            label="เปลี่ยนรหัสผ่าน"
+          ></q-btn>
+        </div>
+      </q-card-section>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script>
 import { defineComponent, ref, computed } from "vue";
 import { useOnsaveAccount } from "src/pinia-store/account";
 import {
+  ForgotPassword,
   LoginWithFirebase,
   LoginWithGoogle,
   RegistWithFirebase,
@@ -188,10 +210,15 @@ export default defineComponent({
 
   setup() {
     //manage layout
+    const resetEmail = ref("");
     const isShowGetStart = ref(true);
     const onChangeBg = ref(true);
     const isShowLogin = ref(false);
     const isShowRegister = ref(false);
+    const openDialog = ref(false);
+    const onReset = () => {
+      openDialog.value = true;
+    };
 
     //manage data
     const email = ref("");
@@ -200,6 +227,11 @@ export default defineComponent({
     const account = computed(() => accountPinia.account);
 
     //firebase
+    const onSentEmail = async () => {
+      await ForgotPassword(resetEmail.value);
+      openDialog.value = false;
+    };
+
     const login = async () => {
       const user = await LoginWithFirebase(email.value, password.value);
       if (user.user) {
@@ -253,6 +285,10 @@ export default defineComponent({
     };
 
     return {
+      onSentEmail,
+      resetEmail,
+      openDialog,
+      onReset,
       onChangeBg,
       isShowGetStart,
       isShowLogin,

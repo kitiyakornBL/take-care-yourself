@@ -63,6 +63,19 @@ const RegistWithFirebase = async (email, password) => {
   }
 };
 
+const ForgotPassword = async (email) => {
+  try {
+    const resetProvider = await firebaseAuth.sendPasswordResetEmail(
+      auth,
+      email
+    );
+    alert("คำร้องขอการเปลี่ยนรหัสผ่านได้ถูกส่งไปยังอีเมลเเล้ว");
+    return resetProvider;
+  } catch (error) {
+    alert(e);
+  }
+};
+
 //------------------------ Mange Data -----------------------------------------------
 
 const fetchNewsData = async () => {
@@ -89,14 +102,12 @@ const fetchHopitalData = async () => {
 };
 
 const createTimeline = async (payload) => {
-  console.log(payload);
   await addDoc(collection(db, "timeline"), { payload });
   // await setDoc(doc(db, "timeline"), payload);
   // console.log("successed");
 };
 
 const deleteTimeline = async (id) => {
-  console.log(id);
   await deleteDoc(doc(db, "timeline", id));
   // await setDoc(doc(db, "timeline"), payload);
   // console.log("successed");
@@ -109,6 +120,7 @@ export {
   fetchTimeline,
   fetchNewsData,
   fetchHopitalData,
+  ForgotPassword,
   LoginWithGoogle,
   LoginWithFirebase,
   RegistWithFirebase,

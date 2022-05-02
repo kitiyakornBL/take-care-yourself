@@ -163,15 +163,10 @@ export default defineComponent({
           },
         ],
       });
-      console.log(data.value);
     };
-    const onSubmit = () => {
-      console.log(data.value, "result");
-    };
+    const onSubmit = () => {};
     const addText = (index) => {
       const test = data.value[index].groupText.push({ text: "" });
-      console.log(test, "1");
-      console.log(data.value, "2");
     };
     return {
       addTimeLine,
