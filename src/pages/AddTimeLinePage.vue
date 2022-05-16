@@ -97,6 +97,21 @@
               />
             </div>
           </div>
+          <div class="flex-row q-mb-md" style="width: 100%; padding: 0 10px">
+            <q-input
+              v-model="item.startTime"
+              outlined
+              placeholder="เวลาที่เข้าใช้"
+              class="q-mr-md"
+              style="background-color: white"
+            ></q-input>
+            <q-input
+              v-model="item.endTime"
+              outlined
+              placeholder="เวลาที่ออก"
+              style="background-color: white"
+            ></q-input>
+          </div>
           <div style="width: 100%; padding: 0 10px">
             <div
               @click="checkBuilding"
@@ -162,6 +177,12 @@
       </div>
     </div>
     <!-- bottom -->
+    <q-file
+      class="q-pa-md q-mb-sm"
+      filled
+      v-model="image"
+      label="อัพโหลดรูป ATK"
+    />
     <div
       class="row q-gutter-x-md"
       style="
@@ -184,7 +205,7 @@
         class="flex-1"
         style="background-color: #04c5c9; font-weight: 900; border-radius: 10px"
         @click="onSubmit()"
-        label="ถัดไป"
+        label="บันทึก"
       />
     </div>
 
@@ -287,7 +308,9 @@
 
 <script>
 import dayjs from "dayjs";
+import { UploadImage } from "../boot/firebase";
 import { useQuasar } from "quasar";
+import { useRouter } from "vue-router";
 import { useOnsaveAccount } from "src/pinia-store/account";
 import { createTimeline } from "src/boot/firebase";
 import { defineComponent, ref, computed } from "vue";
@@ -295,10 +318,17 @@ export default defineComponent({
   name: "AddTimeLinePage",
 
   setup() {
+    const image = ref();
+    const router = useRouter();
     const $q = useQuasar();
     const stageOne = ref(true);
     const data = ref([
-      { date: "", detail: [{ location: "", room: "", desc: "" }] },
+      {
+        date: "",
+        detail: [
+          { location: "", room: "", desc: "", startTime: "", endTime: "" },
+        ],
+      },
     ]);
     const accountPinia = useOnsaveAccount();
     const uid = computed(() => accountPinia.account);
@@ -379,14 +409,17 @@ export default defineComponent({
         });
       }
     };
-    const onSubmit = () => {
+    const onSubmit = async () => {
+      const imagUrl = await UploadImage(image.value);
       const date = dayjs(Date.now()).format("YYYY/MM/DD");
       const payload = {
+        photo: imagUrl,
         newDate: date,
         account_id: uid.value.uid,
         data: data.value,
       };
-      createTimeline(payload);
+      await createTimeline(payload);
+      router.push({ path: "record-page" });
     };
     const backPage = () => {
       void window.history.back();
@@ -451,6 +484,7 @@ export default defineComponent({
       currentIndex,
       desc,
       back,
+      image,
       stageOne,
       stageTwo,
       deleteTimeLine,
@@ -470,5 +504,4 @@ export default defineComponent({
 });
 </script>
 
-<style>
-</style>
+<style></style>

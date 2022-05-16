@@ -24,7 +24,9 @@ export default defineComponent({
         } else {
           console.log(user);
           const userDetail = {
-            name: user.email,
+            photo: user.photoURL,
+            name: user.displayName,
+            email: user.email,
             uid: user.uid,
           };
           accountPinia.onSaveAccount(userDetail);

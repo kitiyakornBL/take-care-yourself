@@ -2,6 +2,7 @@ import * as firebaseAuth from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 import { deleteDoc, setDoc, addDoc, doc } from "firebase/firestore";
+import { getStorage, getDownloadURL, uploadBytes, ref } from "firebase/storage";
 
 // import { createApp } from "vue";
 // import { createPinia } from "pinia";
@@ -24,6 +25,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = firebaseAuth.getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage();
 // const auth = firebase.auth();
 
 //------------------------- Credentail ----------------------------------------------
@@ -50,17 +52,45 @@ const LoginWithGoogle = async () => {
   }
 };
 
-const RegistWithFirebase = async (email, password) => {
+const RegistWithFirebase = async (email, password, name) => {
   try {
     const provider = await firebaseAuth.createUserWithEmailAndPassword(
       auth,
       email,
       password
     );
+    const displayName = await firebaseAuth.updateProfile(provider.user, {
+      displayName: name,
+    });
     return provider;
   } catch (e) {
     throw new Error(e);
   }
+};
+
+const UploadImage = async (file) => {
+  const user = auth.currentUser;
+  const storageRef = ref(storage, Date.now().toString());
+  await uploadBytes(storageRef, file);
+  const imageUrl = await getDownloadURL(storageRef);
+  const profile = await firebaseAuth.updateProfile(user, {
+    photoURL: imageUrl,
+  });
+  return imageUrl;
+};
+
+const EditDisplayName = async (name) => {
+  const user = auth.currentUser;
+  let userDetail;
+  const displayName = await firebaseAuth.updateProfile(user, {
+    displayName: name,
+  });
+  userDetail = {
+    name: user.displayName,
+    email: user.email,
+    uid: user.uid,
+  };
+  return userDetail;
 };
 
 const ForgotPassword = async (email) => {
@@ -115,6 +145,8 @@ const deleteTimeline = async (id) => {
 
 export {
   auth,
+  UploadImage,
+  EditDisplayName,
   deleteTimeline,
   createTimeline,
   fetchTimeline,

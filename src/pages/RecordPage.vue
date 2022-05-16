@@ -91,16 +91,30 @@
             "
           >
             <div class="flex-row q-gutter-x-md q-mb-md">
-              <q-icon style="display: block" name="schedule" />
+              <q-icon style="display: block" name="calendar_month" />
               <span>{{ item.date }}</span>
             </div>
             <div v-for="(item, i) in item.detail" :key="i">
               <div class="flex-row q-gutter-x-md q-mb-md">
-                <q-icon style="display: block" name="building" />
+                <q-icon style="display: block" name="domain" />
                 <span>{{ item.location }}</span>
               </div>
+              <div
+                v-if="item.startTime && item.endTime"
+                class="flex-row q-mb-md"
+                style="width: 100%"
+              >
+                <q-icon
+                  class="q-mr-md"
+                  style="display: block"
+                  name="schedule"
+                />
+                <div>{{ item.startTime }}</div>
+                <span class="q-mr-md q-ml-md"> ถึง </span>
+                <div>{{ item.endTime }}</div>
+              </div>
               <div class="flex-row q-gutter-x-md q-mb-md">
-                <q-icon style="display: block" name="building" />
+                <q-icon style="display: block" name="meeting_room" />
                 <span>{{ item.room }}</span>
               </div>
               <div
@@ -111,6 +125,12 @@
               </div>
             </div>
             <q-separator />
+          </div>
+          <div v-if="selectedData.payload.photo" class="q-pa-sm">
+            <q-img
+              :src="selectedData.payload.photo"
+              style="width: 300px; height: 300px"
+            ></q-img>
           </div>
         </q-card-section>
       </q-card>
@@ -148,18 +168,24 @@ export default defineComponent({
 
     const onDeleteTimeline = async (id) => {
       await deleteTimeline(id);
+      fetchData();
+      showMenu.value = false;
     };
 
     const onFormatDate = (date) => {
       return dayjs(date).locale("th").format("YYYY MMMM DD");
     };
 
+    const fetchData = async () => {
+      const allTimeline = await fetchTimeline();
+      account_timeline.value = allTimeline.timeline.filter(
+        (data) => data.payload.account_id == uid.value.uid
+      );
+    };
+
     onMounted(async () => {
       if (uid.value) {
-        const allTimeline = await fetchTimeline();
-        account_timeline.value = allTimeline.timeline.filter(
-          (data) => data.payload.account_id == uid.value.uid
-        );
+        await fetchData();
       }
     });
 
@@ -178,5 +204,4 @@ export default defineComponent({
 });
 </script>
 
-<style>
-</style>
+<style></style>

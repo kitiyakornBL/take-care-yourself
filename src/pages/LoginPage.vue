@@ -149,6 +149,12 @@
           />
         </q-btn>
         <q-input
+          v-model="name"
+          outlined
+          placeholder="ชื่อ"
+          style="background-color: #f7f8fa; border: none"
+        ></q-input>
+        <q-input
           v-model="email"
           outlined
           placeholder="อีเมล"
@@ -221,6 +227,7 @@ export default defineComponent({
     };
 
     //manage data
+    const name = ref("");
     const email = ref("");
     const password = ref("");
     const accountPinia = useOnsaveAccount();
@@ -247,6 +254,7 @@ export default defineComponent({
       try {
         const loginWithGoogle = await LoginWithGoogle();
         const userDetail = {
+          email: loginWithGoogle.user.email,
           name: loginWithGoogle.user.displayName,
           uid: loginWithGoogle.user.uid,
         };
@@ -258,7 +266,18 @@ export default defineComponent({
 
     const registWithFirebase = async () => {
       try {
-        const regist = await RegistWithFirebase(email.value, password.value);
+        const regist = await RegistWithFirebase(
+          email.value,
+          password.value,
+          name.value
+        );
+        const userDetail = {
+          email: regist.user.email,
+          name: regist.user.displayName,
+          uid: regist.user.uid,
+        };
+        accountPinia.onSaveAccount(userDetail);
+        console.log(regist);
         backToLogin();
       } catch (e) {
         alert(e);
@@ -288,6 +307,7 @@ export default defineComponent({
       onSentEmail,
       resetEmail,
       openDialog,
+      name,
       onReset,
       onChangeBg,
       isShowGetStart,

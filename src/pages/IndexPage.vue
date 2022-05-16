@@ -105,7 +105,7 @@
       </div>
       <div class="col flex justify-center">
         <q-btn
-          to="static-each"
+          to="static-page"
           class="flex-1"
           style="background-color: #e0f2f2; height: 115px"
         >

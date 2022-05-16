@@ -112,16 +112,26 @@
           "
         >
           <div class="flex-row q-gutter-x-md q-mb-md">
-            <q-icon style="display: block" name="schedule" />
+            <q-icon style="display: block" name="calendar_month" />
             <span>{{ item.date }}</span>
           </div>
           <div v-for="(item, i) in item.detail" :key="i">
             <div class="flex-row q-gutter-x-md q-mb-md">
-              <q-icon style="display: block" name="building" />
+              <q-icon style="display: block" name="domain" />
               <span>{{ item.location }}</span>
             </div>
+            <div
+              v-if="item.startTime && item.endTime"
+              class="flex-row q-mb-md"
+              style="width: 100%"
+            >
+              <q-icon class="q-mr-md" style="display: block" name="schedule" />
+              <div>{{ item.startTime }}</div>
+              <span class="q-mr-md q-ml-md"> ถึง </span>
+              <div>{{ item.endTime }}</div>
+            </div>
             <div class="flex-row q-gutter-x-md q-mb-md">
-              <q-icon style="display: block" name="building" />
+              <q-icon style="display: block" name="meeting_room" />
               <span>{{ item.room }}</span>
             </div>
             <div

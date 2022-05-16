@@ -8,11 +8,15 @@ const routes = [
     path: "/",
     component: () => import("layouts/MainLayout.vue"),
     children: [
-      { path: "index-page", component: () => import("pages/IndexPage.vue") },
+      { path: "", component: () => import("pages/IndexPage.vue") },
       { path: "new-page", component: () => import("pages/NewPage.vue") },
       { path: "check-page", component: () => import("pages/CheckPage.vue") },
       { path: "record-page", component: () => import("pages/RecordPage.vue") },
       { path: "static-page", component: () => import("pages/StaticPage.vue") },
+      {
+        path: "profile-page",
+        component: () => import("pages/ProfilePage.vue"),
+      },
       {
         path: "static-each",
         component: () => import("pages/StaticEachPage.vue"),
