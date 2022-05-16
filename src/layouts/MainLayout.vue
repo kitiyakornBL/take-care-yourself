@@ -96,7 +96,7 @@ const linksList = [
     link: "new-page",
   },
   {
-    title: "ตรวจสอบทาม์ไลน์",
+    title: "ตรวจสอบไทม์ไลน์",
     icon: "find_in_page",
     link: "check-page",
   },
