@@ -111,7 +111,7 @@ const linksList = [
     link: "hospital-contact",
   },
   {
-    title: "Station ใกล้คุณ",
+    title: "ตรวจสอบพื้นที่เสี่ยงใกล้คุณ",
     icon: "location_on",
     link: "station",
   },
