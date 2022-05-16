@@ -100,7 +100,7 @@
             src="images/13.png"
             style="width: 60px; height: 60px"
           />
-          <span style="font-weight: 600">Station ใกล้คุณ</span>
+          <span style="font-weight: 600"> ตรวจสอบพื้นที่เสี่ยงใกล้คุณ</span>
         </q-btn>
       </div>
       <div class="col flex justify-center">
