@@ -9,7 +9,7 @@
       style="
         width: 100%;
         height: 60vw;
-        border-radius: 20px;
+        border-radius: 15px;
         box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.25);
         margin-bottom: 30px;
       "
@@ -23,7 +23,7 @@
     <div>
       <q-img
         src="images/111.jpg"
-        style="border-radius: 20px; margin-bottom: 30px"
+        style="border-radius: 15px; margin-bottom: 30px"
       />
     </div>
     <div
@@ -34,42 +34,43 @@
         <q-btn
           to="new-page"
           class="flex-1"
-          style="background-color: #e0f2f2; height: 115px; height: 115px"
+          style="background-color: #e0f2f2; height: 130px; border-radius: 10px"
         >
           <q-img
             :ratio="1"
             src="images/9.png"
-            style="width: 60px; height: 60px"
+            style="width: 70px; height: 70px; margin-top: 5px"
           />
-          <span style="font-weight: 600">ฟีดข่าว</span>
+          <span style="font-weight: 500">ฟีดข่าว</span>
         </q-btn>
       </div>
+
       <div class="col flex justify-center">
         <q-btn
           class="flex-1"
-          style="background-color: #e0f2f2; height: 115px"
+          style="background-color: #e0f2f2; height: 130px; border-radius: 10px"
           to="check-page"
         >
           <q-img
             :ratio="1"
             src="images/10.png"
-            style="width: 60px; height: 60px"
+            style="width: 60px; height: 60px; margin-top: 5px"
           />
-          <span style="font-weight: 600">ตรวจสอบไทม์ไลน์</span>
+          <span style="font-weight: 500">ตรวจสอบไทม์ไลน์</span>
         </q-btn>
       </div>
       <div class="col flex justify-center">
         <q-btn
           to="add-timline-page"
           class="flex-1"
-          style="background-color: #e0f2f2; height: 115px"
+          style="background-color: #e0f2f2; height: 130px; border-radius: 10px"
         >
           <q-img
             :ratio="1"
             src="images/11.png"
-            style="width: 60px; height: 60px"
+            style="width: 75px; height: 75px"
           />
-          <span style="font-weight: 600">บันทึกไทม์ไลน์</span>
+          <span style="font-weight: 550; font-size: 13px">บันทึกไทม์ไลน์</span>
         </q-btn>
       </div>
     </div>
@@ -79,42 +80,44 @@
         <q-btn
           to="hospital-contact"
           class="flex-1"
-          style="background-color: #e0f2f2; height: 115px"
+          style="background-color: #e0f2f2; height: 130px; border-radius: 10px"
         >
           <q-img
             :ratio="1"
             src="images/12.png"
-            style="width: 60px; height: 60px"
+            style="width: 70px; height: 70px; margin-top: 5px"
           />
-          <span style="font-weight: 600">โรงพยาบาล</span>
+          <span style="font-weight: 500">โรงพยาบาล</span>
         </q-btn>
       </div>
       <div class="col flex justify-center">
         <q-btn
           to="station"
           class="flex-1"
-          style="background-color: #e0f2f2; height: 115px"
+          style="background-color: #e0f2f2; height: 130px; border-radius: 10px"
         >
           <q-img
             :ratio="1"
             src="images/13.png"
             style="width: 60px; height: 60px"
           />
-          <span style="font-weight: 600"> ตรวจสอบพื้นที่เสี่ยงใกล้คุณ</span>
+          <span style="font-weight: 550; font-size: 11.5px">
+            ตรวจสอบพื้นที่เสี่ยงใกล้คุณ</span
+          >
         </q-btn>
       </div>
       <div class="col flex justify-center">
         <q-btn
           to="static-page"
           class="flex-1"
-          style="background-color: #e0f2f2; height: 115px"
+          style="background-color: #e0f2f2; height: 130px; border-radius: 10px"
         >
           <q-img
             :ratio="1"
             src="images/16.png"
-            style="width: 60px; height: 60px"
+            style="width: 45px; height: 75px; margin-top: 5px"
           />
-          <span style="font-weight: 600">สถิติผู้ติดเชื้อ</span>
+          <span style="font-weight: 500">สถิติผู้ติดเชื้อ</span>
         </q-btn>
       </div>
     </div>

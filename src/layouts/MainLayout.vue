@@ -13,7 +13,6 @@
         <q-toolbar-title class="row justify-center">{{
           title
         }}</q-toolbar-title>
-        <q-icon name="notifications_none" size="25px" />
       </q-toolbar>
     </q-header>
 
