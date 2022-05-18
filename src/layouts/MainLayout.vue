@@ -13,6 +13,7 @@
         <q-toolbar-title class="row justify-center">{{
           title
         }}</q-toolbar-title>
+        <q-icon name="notifications_none" size="25px" />
       </q-toolbar>
     </q-header>
 
@@ -24,9 +25,9 @@
             unelevated
             icon="chevron_left"
             style="
-              color: white;
-              font-weight: 700;
-              width: 40px;
+              color: red;
+              font-weight: 500;
+              width: 260px;
               height: 40px;
               margin-left: 18px;
               border-radius: 10px;
@@ -63,7 +64,7 @@
 
           <q-item-section>
             <q-item-label
-              style="color: #002245; font-size: 18px; font-weight: bold"
+              style="color: #002245; font-size: 18px; font-weight: 500"
               >ออกจากระบบ</q-item-label
             >
           </q-item-section>
