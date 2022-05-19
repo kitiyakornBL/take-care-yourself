@@ -6,7 +6,7 @@
       icon="chevron_left"
       style="
         color: white;
-        font-weight: 700;
+        font-weight: 500;
         width: 40px;
         height: 40px;
         margin-bottom: 20px;
