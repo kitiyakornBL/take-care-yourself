@@ -23,7 +23,7 @@
             padding: 0 13px;
           "
         >
-          <span style="font-weight: 900; color: #002245">
+          <span style="font-weight: 500; color: #002245">
             {{ date }}
           </span>
           <q-icon
@@ -92,7 +92,7 @@
           style="
             background-color: #f7f8fa;
             width: 100%;
-            background-color: #002245;
+            background-color: #f25252;
             border-radius: 10px 10px 0 0;
             height: 40px;
           "
@@ -106,7 +106,7 @@
           :key="i"
           style="
             color: #002245;
-            font-weight: 700;
+            font-weight: 500;
             background-color: #f7f8fa;
             padding: 10px;
           "
