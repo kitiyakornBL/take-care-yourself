@@ -6,7 +6,7 @@
           @click="showBuildingDialog = true"
           class="flex justiflex-center items-center"
           style="
-            border-radius: 4px;
+            border-radius: 10px;
             background-color: #f2f2f2;
             width: 100%;
             height: 40px;
@@ -14,7 +14,7 @@
             padding: 0 13px;
           "
         >
-          <span style="font-weight: 900; color: #002245">
+          <span style="font-weight: 500; color: #002245">
             {{ building }}
           </span>
           <q-icon
@@ -46,13 +46,13 @@
           >
             <div class="col">
               <div class="row justify-center">
-                <span class="flex items-center q-pr-sm" style="font-weight: 900"
+                <span class="flex items-center q-pr-sm" style="font-weight: 500"
                   >จำนวนผู้ติดเชื้อ
                 </span>
                 <img src="images/5.png" style="width: 30px; height: 30px" />
               </div>
               <div class="row justify-center">
-                <span style="font-weight: 900; font-size: 26px"
+                <span style="font-weight: 500; font-size: 26px"
                   >{{ onFilterData }}
                 </span>
               </div>
@@ -69,13 +69,13 @@
           >
             <div class="col">
               <div class="row justify-center">
-                <span class="flex items-center q-pr-sm" style="font-weight: 900"
+                <span class="flex items-center q-pr-sm" style="font-weight: 500"
                   >ความเสี่ยง
                 </span>
                 <img src="icons/u_home.png" style="width: 30px; height: 30px" />
               </div>
               <div class="row justify-center" v-if="sum">
-                <span style="font-weight: 900; font-size: 26px"
+                <span style="font-weight: 500; font-size: 26px"
                   >{{ percent }} %</span
                 >
               </div>
@@ -94,7 +94,7 @@
           >
             <div class="col">
               <div class="row justify-center">
-                <span class="flex items-center q-pr-sm" style="font-weight: 900"
+                <span class="flex items-center q-pr-sm" style="font-weight: 500"
                   >ระดับประชากร
                 </span>
                 <img
@@ -103,7 +103,7 @@
                 />
               </div>
               <div class="row justify-center">
-                <span style="font-weight: 900; font-size: 26px">-</span>
+                <span style="font-weight: 500; font-size: 26px">-</span>
               </div>
             </div>
           </div>
@@ -118,13 +118,13 @@
           >
             <div class="col">
               <div class="row justify-center">
-                <span class="flex items-center q-pr-sm" style="font-weight: 900"
+                <span class="flex items-center q-pr-sm" style="font-weight: 500"
                   >ผู้ติดเชื้อรายใหม่
                 </span>
                 <img src="icons/users.png" style="width: 30px; height: 30px" />
               </div>
               <div class="row justify-center">
-                <span style="font-weight: 900; font-size: 26px">{{
+                <span style="font-weight: 500; font-size: 26px">{{
                   today
                 }}</span>
               </div>
